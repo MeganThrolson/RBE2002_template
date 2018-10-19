@@ -26,7 +26,7 @@ GearWrist * wristPtr;
 Servo jaw;
 Servo panEyes;
 Servo tiltEyes;
-
+ESP32PWM dummy;
 GetIMU * sensor;
 long lastPrint = 0;
 // Change this to set your team name
@@ -35,8 +35,7 @@ UDPSimplePacket coms;
 WifiManager manager;
 DFRobotIRPosition myDFRobotIRPosition;
 int numberOfPID = 2;
-PID ** pidList = { &motor1.myPID, &motor2.myPID};
-long lastPrint = 0;
+PID * pidList []= { &motor1.myPID, &motor2.myPID };
 void setup() {
 	Serial.begin(115200);
 
@@ -56,6 +55,7 @@ void setup() {
 	panEyes.attach(18, 1000, 2000);
 	tiltEyes.setPeriodHertz(330);
 	tiltEyes.attach(5, 1000, 2000);
+	dummy.getChannel();
 	manager.setup();
 
 	// Create sensors and servers
@@ -107,5 +107,16 @@ void loop() {
 //					"\tVal " + String(i) + " = "
 //							+ String((uint8_t) control.values[i]));
 //		}
+		if (myDFRobotIRPosition.available()) {
+			for (int i = 0; i < 4; i++) {
+				Serial.print(myDFRobotIRPosition.readX(i));
+				Serial.print(",");
+
+				Serial.print(myDFRobotIRPosition.readY(i));
+				Serial.print(";");
+			}
+			Serial.println();
+
+		}
 	}
 }
