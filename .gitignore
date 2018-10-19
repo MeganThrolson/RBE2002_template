@@ -36,6 +36,7 @@ libraries/
 sloeber.ino.cpp
 bin/
 tmp/
+Release/
 *.tmp
 *.bak
 *.swp
