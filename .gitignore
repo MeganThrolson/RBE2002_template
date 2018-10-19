@@ -31,6 +31,9 @@
 *.out
 *.app
 .metadata
+core/
+libraries/
+sloeber.ino.cpp
 bin/
 tmp/
 *.tmp
@@ -41,7 +44,7 @@ local.properties
 .settings/
 .loadpath
 .recommenders
-
+.project
 # External tool builders
 .externalToolBuilders/
 
