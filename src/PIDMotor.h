@@ -12,11 +12,12 @@
 #define PID_OUTPUT_COMPUTE_RANGE 900
 class PIDMotor {
 protected:
-	PID myPID;
+
 	float Kp=2, Ki=0, Kd=0;
 	double Setpoint=0, Input=0, Output=0;
 	bool lastErrPositive=false;
 public:
+	PID myPID;
 	PIDMotor();
 	virtual ~PIDMotor();
 	void loop();
