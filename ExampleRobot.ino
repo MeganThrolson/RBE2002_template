@@ -24,7 +24,7 @@ void setup(){
 	control.begin();
 	wristPtr=new GearWrist(&motor1,
 			&motor2,
-			16.0*// Encoder CPR
+			16.0* // Encoder CPR
 			50.0* // Gear box ratio
 			2.5347* // Wrist gear stage ratio
 			(1.0/360.0)* // degrees per revolution
