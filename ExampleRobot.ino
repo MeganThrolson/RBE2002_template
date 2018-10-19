@@ -26,8 +26,8 @@ void setup(){
 			&motor2,
 			16.0*// Encoder CPR
 			50.0* // Gear box ratio
-			2.5347/ // Wrist gear stage ratio
-			360.0* // degrees per revolution
+			2.5347* // Wrist gear stage ratio
+			(1.0/360.0)* // degrees per revolution
 			4.0,   // full quadrature, 4 ticks be encoder count
 			0.8932); // ratio of second stage to first stage
 	jaw.attach(19,1000,2000);
