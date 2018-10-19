@@ -7,6 +7,7 @@
 
 #include "PIDMotor.h"
 #include <Arduino.h>
+
 PIDMotor::PIDMotor() :
 		myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT) {
 

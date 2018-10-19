@@ -4,8 +4,14 @@
 #include "src/PIDMotor.h"
 #include "src/ServoEncoderPIDMotor.h"
 #include "src/HBridgeEncoderPIDMotor.h"
+#include <Wire.h>
 #include <WiiChuck.h>
 #include "src/GearWrist.h"
+#include <Preferences.h>
+#include <WiFi.h>
+#include <SimplePacketComs.h>
+#include <Esp32SimplePacketComs.h>
+
 Accessory control;
 HBridgeEncoderPIDMotor motor1;
 HBridgeEncoderPIDMotor motor2;
