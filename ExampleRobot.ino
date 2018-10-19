@@ -20,7 +20,7 @@ void setup(){
 
 	motor1.attach(2,15, 36, 39);
 	motor2.attach(16,4, 34, 35);
-	Serial.println("Starting Motors:");
+	Serial.println("Starting Motors: 1");
 	control.begin();
 	wristPtr=new GearWrist(&motor1,
 			&motor2,
