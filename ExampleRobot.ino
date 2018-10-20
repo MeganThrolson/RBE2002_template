@@ -23,10 +23,9 @@ Accessory control;
 HBridgeEncoderPIDMotor motor1;
 HBridgeEncoderPIDMotor motor2;
 GearWrist * wristPtr;
+Servo tiltEyes;
 Servo jaw;
 Servo panEyes;
-Servo tiltEyes;
-ESP32PWM dummy;
 GetIMU * sensor;
 long lastPrint = 0;
 // Change this to set your team name
@@ -35,10 +34,23 @@ UDPSimplePacket coms;
 WifiManager manager;
 DFRobotIRPosition myDFRobotIRPosition;
 int numberOfPID = 2;
-PID * pidList []= { &motor1.myPID, &motor2.myPID };
-void setup() {
-	Serial.begin(115200);
+PID * pidList[] = { &motor1.myPID, &motor2.myPID };
+portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
+hw_timer_t * timer = NULL;
+bool timerStartedCheck = false;
 
+void IRAM_ATTR onTimer() {
+	portENTER_CRITICAL_ISR(&timerMux);
+	digitalWrite(5, HIGH);   // turn the LED on (HIGH is the voltage level)
+	wristPtr->loop();
+	digitalWrite(5, LOW);   // turn the LED on (HIGH is the voltage level)
+	portEXIT_CRITICAL_ISR(&timerMux);
+
+}
+void setup() {
+//	manager.setup();
+//	pinMode(5, OUTPUT);
+	Serial.begin(115200);
 	motor1.attach(2, 15, 36, 39);
 	motor2.attach(16, 4, 34, 35);
 	Serial.println("Starting Motors: 4");
@@ -49,16 +61,14 @@ void setup() {
 			(1.0 / 360.0) * // degrees per revolution
 			4.0,   // full quadrature, 4 ticks be encoder count
 	0.8932); // ratio of second stage to first stage
-	jaw.attach(19, 1000, 2000);
-	jaw.setPeriodHertz(330);
+
 	panEyes.setPeriodHertz(330);
 	panEyes.attach(18, 1000, 2000);
+	jaw.setPeriodHertz(330);
+	jaw.attach(19, 1000, 2000);
 	tiltEyes.setPeriodHertz(330);
-	tiltEyes.attach(5, 1000, 2000);
-	dummy.getChannel();
-	manager.setup();
-
-	// Create sensors and servers
+	tiltEyes.attach(23, 1000, 2000);
+//	// Create sensors and servers
 	sensor = new GetIMU();
 	sensor->startSensor();
 	myDFRobotIRPosition.begin();
@@ -68,10 +78,13 @@ void setup() {
 	coms.attach(new IRCamSimplePacketComsServer(&myDFRobotIRPosition));
 	coms.attach(new NameCheckerServer(name));
 
+	// PID control loop timer
+
 }
 float mapf(float x, float in_min, float in_max, float out_min, float out_max) {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+
 void loop() {
 	manager.loop();
 	if (manager.getState() == Connected)
@@ -79,10 +92,15 @@ void loop() {
 	else
 		return;
 	sensor->loop();
-	wristPtr->loop();
-	if (millis() - lastPrint > 20) {
+	if (!timerStartedCheck) {
+		timerStartedCheck = true;
+		timer = timerBegin(3, 80, true);
+		timerAttachInterrupt(timer, &onTimer, true);
+		timerAlarmWrite(timer, 1000, true);
+		timerAlarmEnable(timer);
+	}
+	if (millis() - lastPrint > 50) {
 		lastPrint = millis();
-		myDFRobotIRPosition.requestPosition();
 		control.readData();    // Read inputs and update maps
 		float Servo1Val = mapf((float) control.values[1], 0.0, 255.0, -10.0,
 				10.0);
@@ -94,11 +112,14 @@ void loop() {
 						128)    //neither pressed
 				, 0, 255, 80, 160);
 		int tiltVal = map(control.values[3], 0, 255, 24, 120);    // z button
+
+		portENTER_CRITICAL(&timerMux);
 		panEyes.write(panVal);
 		tiltEyes.write(tiltVal);
 		jaw.write(jawVal);
-
 		wristPtr->setTarget(Servo1Val, Servo3Val);
+		portEXIT_CRITICAL(&timerMux);
+
 		//Serial.println(" Pan  = " +String(panVal)+" tilt = " +String(tiltVal));
 		//Serial.println(" Angle of A = " +String(wristPtr->getA())+" Angle of B = " +String(wristPtr->getB()));
 
@@ -107,16 +128,20 @@ void loop() {
 //					"\tVal " + String(i) + " = "
 //							+ String((uint8_t) control.values[i]));
 //		}
-		if (myDFRobotIRPosition.available()) {
-			for (int i = 0; i < 4; i++) {
-				Serial.print(myDFRobotIRPosition.readX(i));
-				Serial.print(",");
+		myDFRobotIRPosition.requestPosition();
+		delay(1);
+		myDFRobotIRPosition.available();
 
-				Serial.print(myDFRobotIRPosition.readY(i));
-				Serial.print(";");
-			}
-			Serial.println();
-
-		}
+//		if (!myDFRobotIRPosition.available()) {
+////			for (int i = 0; i < 4; i++) {
+////				Serial.print(myDFRobotIRPosition.readX(i));
+////				Serial.print(",");
+////
+////				Serial.print(myDFRobotIRPosition.readY(i));
+////				Serial.print(";");
+////			}
+////			Serial.println();
+//
+//		}
 	}
 }
