@@ -41,15 +41,14 @@ bool timerStartedCheck = false;
 
 void IRAM_ATTR onTimer() {
 	portENTER_CRITICAL_ISR(&timerMux);
-	digitalWrite(5, HIGH);   // turn the LED on (HIGH is the voltage level)
+	//digitalWrite(5, HIGH);   // turn the LED on (HIGH is the voltage level)
 	wristPtr->loop();
-	digitalWrite(5, LOW);   // turn the LED on (HIGH is the voltage level)
+	//digitalWrite(5, LOW);   // turn the LED on (HIGH is the voltage level)
 	portEXIT_CRITICAL_ISR(&timerMux);
 
 }
 void setup() {
-//	manager.setup();
-//	pinMode(5, OUTPUT);
+	manager.setup();
 	Serial.begin(115200);
 	motor1.attach(2, 15, 36, 39);
 	motor2.attach(16, 4, 34, 35);
