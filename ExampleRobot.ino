@@ -49,7 +49,7 @@ void IRAM_ATTR onTimer() {
 }
 void setup() {
 	manager.setup();
-	Serial.begin(115200);
+	//Serial.begin(115200);
 	motor1.attach(2, 15, 36, 39);
 	motor2.attach(16, 4, 34, 35);
 	Serial.println("Starting Motors: 4");
@@ -90,7 +90,9 @@ void loop() {
 		coms.server();
 	else
 		return;
-	sensor->loop();
+	//sensor->loop();
+	delay(1);
+
 	if (!timerStartedCheck) {
 		timerStartedCheck = true;
 		timer = timerBegin(3, 80, true);
@@ -101,8 +103,10 @@ void loop() {
 	if (millis() - lastPrint > 50) {
 		lastPrint = millis();
 		control.readData();    // Read inputs and update maps
+		delay(1);
+
 		float Servo1Val = mapf((float) control.values[1], 0.0, 255.0, -10.0,
-				10.0);
+				2.0);
 		float Servo3Val = mapf((float) control.values[0], 0.0, 255.0, -60.0,
 				60.0);    // z button
 		int panVal = map(control.values[2], 0, 255, 35, 148);
@@ -127,9 +131,9 @@ void loop() {
 //					"\tVal " + String(i) + " = "
 //							+ String((uint8_t) control.values[i]));
 //		}
-		myDFRobotIRPosition.requestPosition();
-		delay(1);
-		myDFRobotIRPosition.available();
+		//myDFRobotIRPosition.requestPosition();
+		//delay(1);
+		//myDFRobotIRPosition.available();
 
 //		if (!myDFRobotIRPosition.available()) {
 ////			for (int i = 0; i < 4; i++) {

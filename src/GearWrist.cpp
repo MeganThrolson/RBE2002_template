@@ -19,11 +19,11 @@ GearWrist::~GearWrist() {
 }
 
 void GearWrist::setTarget(double a, double b){
-	double lmotor = a+(b*wristRatio);
-	double rmotor = a-(b*wristRatio);
+	double lmotor = a*ticksToADegrees+(b*wristRatio)*ticksToADegrees;
+	double rmotor = a*ticksToADegrees-(b*wristRatio*ticksToADegrees);
 
-	left->setSetpoint(lmotor*ticksToADegrees);
-	right->setSetpoint(-rmotor*ticksToADegrees);
+	left->setSetpoint(lmotor);
+	right->setSetpoint(-rmotor);
 }
 double GearWrist::getA(){
 	double lticks = left->getPosition();
