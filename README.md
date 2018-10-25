@@ -1,5 +1,5 @@
-# RBE2001_template
-Template code for the RBE 2001 final project
+# RBE2002_template
+Template code for the RBE 2002 final project
 
 # Hardware
 
@@ -174,11 +174,6 @@ Hit next and get to the Branch Selection window, change nothing and hit next.
 
 Use the default checkout location. 
 
-Mine looks like:
-```
-C:\Users\harrington\Documents\Arduino\libraries\RBE2001
-```
-
 Hit Finish
 
 ## Open your project and start working
@@ -209,9 +204,7 @@ Upload Speed: 921600
 ```
 Then hit next
 
-Hit finish. The code that you should edit is in your project under libraries/RBE2001/
-
-
+Hit finish. 
 
 # Commit your changes
 
@@ -245,7 +238,6 @@ and verify your changes are there.
 
 Your code for your robot is now set up as what Arduino calls a "Library". Libraries are collections of source code with example uses of that cource code. For your labs, the "examples" directory contains .ino files. The .ion file launched the code and should be as tiny as possible, less than 40 lines total. In general, students shouldn't change the .ino examples. 
 
-Student code lives entirely in the "RBE2001" folder under libraries in eclipse. You should modify only code in that directory. 
 
 ## Code Theory and High-level description
 
