@@ -37,7 +37,7 @@ After installation of both, ensure your user has write access to the directories
 
 ### Unsupported OS's
 
-MacOS is unsupported and only intermittantly working. If you have MacOS please install a fresh copy of Windows 10. 
+MacOS is unsupported and only intermittantly working. Drivers have been an issue with programming our board, and virtualization of Windows within OSX is tested non-working. If you have Mac OSX please install a fresh copy of Windows 10 nativly and dual boot. 
 
 Ubuntu 16.04 is unsupported but works well.
 
