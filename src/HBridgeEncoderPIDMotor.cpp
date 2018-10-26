@@ -18,7 +18,7 @@ HBridgeEncoderPIDMotor::~HBridgeEncoderPIDMotor() {
 }
 
 void HBridgeEncoderPIDMotor::attach(int pwmPin,int directionPin,int encoderA, int encoderB){
-	encoder.attachFullQuad(encoderA, encoderB);
+	encoder.attachHalfQuad(encoderA, encoderB);
 	this->directionPin=directionPin;
 	motor.attachPin(pwmPin,5000, 8);
 	pidinit();

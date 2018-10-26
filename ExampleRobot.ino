@@ -49,7 +49,7 @@ void IRAM_ATTR onTimer() {
 }
 void setup() {
 	manager.setup();
-	//Serial.begin(115200);
+	Serial.begin(115200);
 	motor1.attach(2, 15, 36, 39);
 	motor2.attach(16, 4, 34, 35);
 	Serial.println("Starting Motors: 4");
@@ -58,7 +58,7 @@ void setup() {
 			50.0 * // Gear box ratio
 			2.5347 * // Wrist gear stage ratio
 			(1.0 / 360.0) * // degrees per revolution
-			4.0,   // full quadrature, 4 ticks be encoder count
+			motor1.encoder.countsMode, // full quadrature, 4 ticks be encoder count
 	0.8932); // ratio of second stage to first stage
 
 	panEyes.setPeriodHertz(330);
@@ -90,8 +90,6 @@ void loop() {
 		coms.server();
 	else
 		return;
-	//sensor->loop();
-	delay(1);
 
 	if (!timerStartedCheck) {
 		timerStartedCheck = true;
@@ -104,9 +102,15 @@ void loop() {
 		lastPrint = millis();
 		control.readData();    // Read inputs and update maps
 		delay(1);
+		myDFRobotIRPosition.requestPosition();
+		delay(1);
+		myDFRobotIRPosition.available();
+		delay(1);
+//		sensor->loop();
+//		delay(1);
 
-		float Servo1Val = mapf((float) control.values[1], 0.0, 255.0, -10.0,
-				2.0);
+		float Servo1Val = mapf((float) control.values[1], 0.0, 255.0, -15.0,
+				15.0);
 		float Servo3Val = mapf((float) control.values[0], 0.0, 255.0, -60.0,
 				60.0);    // z button
 		int panVal = map(control.values[2], 0, 255, 35, 148);
@@ -125,25 +129,25 @@ void loop() {
 
 		//Serial.println(" Pan  = " +String(panVal)+" tilt = " +String(tiltVal));
 		//Serial.println(" Angle of A = " +String(wristPtr->getA())+" Angle of B = " +String(wristPtr->getB()));
-
+		Serial.println(
+				" Tick of L = " + String((int32_t) motor1.getPosition())
+						+ " Angle of R = "
+						+ String((int32_t) motor2.getPosition()));
 //		for (int i = 0; i < WII_VALUES_ARRAY_SIZE; i++) {
 //			Serial.println(
 //					"\tVal " + String(i) + " = "
 //							+ String((uint8_t) control.values[i]));
 //		}
-		//myDFRobotIRPosition.requestPosition();
-		//delay(1);
-		//myDFRobotIRPosition.available();
 
 //		if (!myDFRobotIRPosition.available()) {
-////			for (int i = 0; i < 4; i++) {
-////				Serial.print(myDFRobotIRPosition.readX(i));
-////				Serial.print(",");
-////
-////				Serial.print(myDFRobotIRPosition.readY(i));
-////				Serial.print(";");
-////			}
-////			Serial.println();
+//			for (int i = 0; i < 4; i++) {
+//				Serial.print(myDFRobotIRPosition.readX(i));
+//				Serial.print(",");
+//
+//				Serial.print(myDFRobotIRPosition.readY(i));
+//				Serial.print(";");
+//			}
+//			Serial.println();
 //
 //		}
 	}

@@ -17,7 +17,7 @@ ServoEncoderPIDMotor::~ServoEncoderPIDMotor() {
 }
 
 void ServoEncoderPIDMotor::attach(int servoPin,int encoderA, int encoderB){
-	encoder.attachFullQuad(encoderA, encoderB);
+	encoder.attachHalfQuad(encoderA, encoderB);
 	motor.setPeriodHertz(330);
 	motor.attach(servoPin, 1000, 2000);
 	pidinit();
