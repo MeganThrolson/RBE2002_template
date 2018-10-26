@@ -12,8 +12,7 @@
 #include <ESP32Encoder.h>
 class HBridgeEncoderPIDMotor : public PIDMotor{
 private:
-	ESP32Encoder encoder;
-	ESP32PWM motor;
+
 	int directionPin;
 public:
 	HBridgeEncoderPIDMotor();
@@ -24,7 +23,8 @@ public:
 	 int64_t getOutputMax();
 	 void setOutput(int64_t out);
 	 void overrideCurrentPositionHardware(int64_t val);
-
+		ESP32Encoder encoder;
+		ESP32PWM motor;
 };
 
 #endif /* SRC_HBRIDGEENCODERPIDMOTOR_H_ */

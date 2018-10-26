@@ -7,7 +7,7 @@
 
 #include "HBridgeEncoderPIDMotor.h"
 #define HBRIDGE_DEADBAND 138
-#define HBRIDGE_MAX (HBRIDGE_DEADBAND+50)
+#define HBRIDGE_MAX 255
 HBridgeEncoderPIDMotor::HBridgeEncoderPIDMotor() {
 	// TODO Auto-generated constructor stub
 	this->directionPin=-1;
@@ -18,7 +18,7 @@ HBridgeEncoderPIDMotor::~HBridgeEncoderPIDMotor() {
 }
 
 void HBridgeEncoderPIDMotor::attach(int pwmPin,int directionPin,int encoderA, int encoderB){
-	encoder.attachFullQuad(encoderA, encoderB);
+	encoder.attachHalfQuad(encoderA, encoderB);
 	this->directionPin=directionPin;
 	motor.attachPin(pwmPin,5000, 8);
 	pidinit();
