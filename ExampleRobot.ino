@@ -26,7 +26,7 @@ GearWrist * wristPtr;
 Servo tiltEyes;
 Servo jaw;
 Servo panEyes;
-GetIMU * sensor;
+//GetIMU * sensor;
 long lastPrint = 0;
 // Change this to set your team name
 String * name = new String("IMU-Team21");
@@ -68,12 +68,12 @@ void setup() {
 	tiltEyes.setPeriodHertz(330);
 	tiltEyes.attach(23, 1000, 2000);
 //	// Create sensors and servers
-	sensor = new GetIMU();
-	sensor->startSensor();
+	//sensor = new GetIMU();
+	//sensor->startSensor();
 	myDFRobotIRPosition.begin();
 
 	// Attach coms
-	coms.attach(sensor);
+	//coms.attach(sensor);
 	coms.attach(new IRCamSimplePacketComsServer(&myDFRobotIRPosition));
 	coms.attach(new NameCheckerServer(name));
 
