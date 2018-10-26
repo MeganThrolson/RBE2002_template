@@ -178,8 +178,6 @@ Hit Finish
 
 ## Open your project and start working
 
-To open the project you will be using Sloeber and the "Linked Example" development model. Your code is set up as a library. your launch file is the .ino, which is found in your projects "examples" directory. 
-
 In Eclipse, Right click in the Project View and select 
 ```
 New->Arduino Sketch
