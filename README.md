@@ -232,28 +232,6 @@ Insights->Network
 ```
 and verify your changes are there. 
 
-# Code Structure
-
-Your code for your robot is now set up as what Arduino calls a "Library". Libraries are collections of source code with example uses of that cource code. For your labs, the "examples" directory contains .ino files. The .ion file launched the code and should be as tiny as possible, less than 40 lines total. In general, students shouldn't change the .ino examples. 
-
-
-## Code Theory and High-level description
-
-At the top of the code we have an instance of the MyRobot() object called robotPointer. This is the object through which all of your code should flow.
-
-Next the set of 5 PacketEvents are added to the dispatcher. Each PacketEvent are stored in the dispatcher, and when an approprate packet is recieved, the event function is called on the approrpate PacketEvent. The dispatcher is called by loopServer() each iteration of the main loop, and at that time the stack is checked for new packets from the Field Controller application. 
-
-A copy of robotPointer is provided to each of the PacketEvents. When you want to read from or write to your robot from the event() function of a given PacketEvent, you use the robotPointer class variable provided in the sample code. The robotPointer is set in the constructor in each PacketEvent. 
-
-
-
-## .h and .cpp files
-
-Header files, ending in .h, contain function definitions. Executable code nd memory allocations do not belong in here. Class definitions and function definitions do belong in here.
-
-Source files, ending in .cpp, contain executable code. This is code that will execute or declare memory usage. Class function definitions and method definitions belong in this file.
-
-Naming conventions insist that the .h and .cpp files have the same base name, and that name match the name of the class defined inside. 
 
 
 
