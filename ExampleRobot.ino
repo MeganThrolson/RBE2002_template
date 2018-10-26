@@ -131,10 +131,10 @@ void loop() {
 
 		//Serial.println(" Pan  = " +String(panVal)+" tilt = " +String(tiltVal));
 		//Serial.println(" Angle of A = " +String(wristPtr->getA())+" Angle of B = " +String(wristPtr->getB()));
-		Serial.println(
-				" Tick of L = " + String((int32_t) motor1.getPosition())
-						+ " Angle of R = "
-						+ String((int32_t) motor2.getPosition()));
+//		Serial.println(
+//				" Tick of L = " + String((int32_t) motor1.getPosition())
+//						+ " Angle of R = "
+//						+ String((int32_t) motor2.getPosition()));
 //		for (int i = 0; i < WII_VALUES_ARRAY_SIZE; i++) {
 //			Serial.println(
 //					"\tVal " + String(i) + " = "
