@@ -7,7 +7,7 @@
 
 #include "HBridgeEncoderPIDMotor.h"
 #define HBRIDGE_DEADBAND 138
-#define HBRIDGE_MAX (HBRIDGE_DEADBAND+50)
+#define HBRIDGE_MAX 255
 HBridgeEncoderPIDMotor::HBridgeEncoderPIDMotor() {
 	// TODO Auto-generated constructor stub
 	this->directionPin=-1;
