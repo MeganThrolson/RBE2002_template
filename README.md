@@ -165,6 +165,9 @@ Set the workspace to Arduino mode. In the upper right hand corner there is a but
 ```
 Arduino -> Preferences
 ```
+And start by removing both of the default values for private Hardware and Private libraries:
+
+![alt text](/doc/removePrivatePaths.png)
 
 Under Private Hardware Path, select New.. and search for (where you extracted Arduino)/hardware/ 
 
