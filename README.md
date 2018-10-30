@@ -71,7 +71,12 @@ download:
 
 http://users.wpi.edu/~glipin/.uploads/RBE-arduino.zip
 
-And extract it somewhare on your computer. Run Arduino in the extracted folder.
+And extract it on your computer in 
+
+```
+C:/RBE-arduino
+```
+Run Arduino in the extracted folder.
 
 ## Personal Computer install Linux / Mac  (Unsupported)
 
@@ -124,7 +129,9 @@ You and your team members should find your repository made with the template cod
 
 Download the eclipse installer from here:
 
-https://www.eclipse.org/downloads/
+[https://www.eclipse.org/downloads/](https://www.eclipse.org/downloads/)
+
+![alt text][doc/downloadEclipseForC.png]
 
 Install the C developemt version. 
 
@@ -209,6 +216,8 @@ Hit finish.
 ### Unfamiliar with Git?
 
 run through this tutorial: https://resources.github.com/videos/github-best-practices/
+
+Also check out this cheat sheet: http://overapi.com/git
 
 ### Familiar with Git?
 When you make a change to any line of code, you should commit your changes. If you have worked for ~1 hour, then you should make a commit with a message describing your work. To do so, go back to 
