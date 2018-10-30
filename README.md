@@ -131,7 +131,7 @@ Download the eclipse installer from here:
 
 [https://www.eclipse.org/downloads/](https://www.eclipse.org/downloads/)
 
-![alt text][doc/downloadEclipseForC.png]
+![alt text](/doc/downloadEclipseForC.png)
 
 Install the C developemt version. 
 
