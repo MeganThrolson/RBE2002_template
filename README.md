@@ -189,12 +189,21 @@ In eclipse, open
 ```
 Window->Show View-> Other -> Git ->Git Repositories
 ```
+![alt text](/doc/GitRepositories.png)
 
-In the browser, Click the clone or download button in your new project and select clone (Be sure HTTPS not SSH is selected, unless you have set up your SSH keys). 
+In the browser, Click the clone or download button in your new project and select clone (Be sure HTTPS not SSH is selected, unless you have set up your SSH keys).
+
+ ![alt text](/doc/cloneFromGithub.png)
 
 Copy the clone URL.
 
-In Eclipse, right click in the git repositories and select clone. If your URL is still copied in the clip board, Eclipse will autofill most the clone information for the first step. Add your username and password.
+In Eclipse, click the clone button: 
+
+ ![alt text](/doc/cloneNewRepo.png)
+
+If your URL is still copied in the clip board, Eclipse will autofill most the clone information for the first step. Add your username and password.
+
+ ![alt text](/doc/startCloning.png)
 
 Hit next and get to the Branch Selection window, change nothing and hit next.
 
@@ -208,13 +217,20 @@ In Eclipse, Right click in the Project View and select
 ```
 New->Arduino Sketch
 ```
-Un check the default location, and seclect 
+Un-check the default location, and seclect where you just cloned your code. Mine looks like: 
 
 ```
-<User Home>/git/<Folder you checked your code into>
+C:\Users\harrington\git\RBE2002Code21
 ```
 
-Give it a name, and select the ESP32 toolchain. 
+Give it the name:
+
+```
+RBE2002Main
+```
+![alt text](/doc/setNameAndSourceLocation.png)
+
+and select the ESP32 toolchain. 
 ```
 Board: ESP32 Dev Module
 Upload Protocol: Default
@@ -226,7 +242,11 @@ Flash Size: 4mb
 Partition Scheme: Default
 Upload Speed: 921600
 ```
-Then hit next
+![alt text](/doc/ESP32-setup.png)
+
+Then hit next and select Default ino file
+
+![alt text](/doc/defaultINO.png)
 
 Hit finish. 
 
