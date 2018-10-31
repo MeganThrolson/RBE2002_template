@@ -141,9 +141,13 @@ Install the C developemt version.
 
 ![alt text](/doc/selectCversion.png)
 
+Install Eclipse on R drive if using lab machine
+
+![alt text](/doc/installOnRDrive.png)
+
 Once the install is done, open eclipse and go to the workbench. 
 
-![alt text](/doc/pickWorkspace.png)
+![alt text](/doc/openWorkspaceOnR.png)
 ![alt text](/doc/goToWorkspace.png)
 
 Open
@@ -167,6 +171,9 @@ Eclipse will restart to load the plugin.
 ```
 Arduino -> Preferences
 ```
+
+![alt text](/doc/ArduinoPreferences.png)
+
 And start by removing both of the default values for private Hardware and Private libraries:
 
 ![alt text](/doc/removePrivatePaths.png)
@@ -184,6 +191,7 @@ Mine looks like:
 ```
 C:\Users\harrington\Documents\Arduino\libraries
 ```
+![alt text](/doc/setPrivateFields.png)
 
 ## Clone your project
 
@@ -219,6 +227,9 @@ In Eclipse, Right click in the Project View and select
 ```
 New->Arduino Sketch
 ```
+
+ ![alt text](/doc/chreateNewSketch.png)
+
 Un-check the default location, and seclect where you just cloned your code. Mine looks like: 
 
 ```
@@ -251,6 +262,11 @@ Then hit next and select Default ino file
 ![alt text](/doc/defaultINO.png)
 
 Hit finish. 
+
+Once the project shows up in Project Explorer tab, build index:
+
+![alt text](/doc/rebuildIndexToAddLibs.png)
+
 
 # Commit your changes
 
