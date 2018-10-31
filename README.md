@@ -160,8 +160,6 @@ Search for Sloeber
 
 ![alt text](/doc/installSloeber.png)
 
-Install "The Arduino Eclipse IDE named Sloeber" and restart eclipse. 
-
 Set the workspace to Arduino mode. In the upper right hand corner there is a button with a little yellow plus sign, and when you hover over it is says "pen Perspective". Click that button. Select Arduino. 
 
 Eclipse will restart to load the plugin.
