@@ -102,11 +102,11 @@ void loop() {
 	}
 	if (millis() - lastPrint > 50) {
 		lastPrint = millis();
-		control.readData();    // Read inputs and update maps
+		//control.readData();    // Read inputs and update maps
 		delay(1);
-		myDFRobotIRPosition.requestPosition();
+		//myDFRobotIRPosition.requestPosition();
 		delay(1);
-		myDFRobotIRPosition.available();
+		//myDFRobotIRPosition.available();
 		delay(1);
 //		sensor->loop();
 //		delay(1);
