@@ -26,7 +26,9 @@ GearWrist * wristPtr;
 Servo tiltEyes;
 Servo jaw;
 Servo panEyes;
-//GetIMU * sensor;
+GetIMU * sensor;
+Adafruit_BNO055 bno;
+
 long lastPrint = 0;
 // Change this to set your team name
 String * name = new String("IMU-Team21");
@@ -38,7 +40,7 @@ PID * pidList[] = { &motor1.myPID, &motor2.myPID };
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
 hw_timer_t * timer = NULL;
 bool timerStartedCheck = false;
-
+bool print = false;
 void IRAM_ATTR onTimer() {
 	portENTER_CRITICAL_ISR(&timerMux);
 	wristPtr->loop();
@@ -53,14 +55,14 @@ void setup() {
 	Serial.println("Starting Motors: 4");
 	control.begin();
 	// Create a module to deal with the demo wrist bevel gears
-	wristPtr = new GearWrist(&motor1,//right motor
+	wristPtr = new GearWrist(&motor1, //right motor
 			&motor2, // left motor
 			16.0 * // Encoder CPR
-			50.0 * // Motor Gear box ratio
-			2.5347 * // Wrist gear stage ratio
-			(1.0 / 360.0) * // degrees per revolution
-			motor1.encoder.countsMode, // full quadrature, 4 ticks be encoder count, half is 2 and single mode is one
-	0.8932); // ratio of second stage to first stage
+					50.0 * // Motor Gear box ratio
+					2.5347 * // Wrist gear stage ratio
+					(1.0 / 360.0) * // degrees per revolution
+					motor1.encoder.countsMode, // full quadrature, 4 ticks be encoder count, half is 2 and single mode is one
+			0.8932); // ratio of second stage to first stage
 
 	// Set up digital servos
 	panEyes.setPeriodHertz(330);
@@ -70,12 +72,29 @@ void setup() {
 	tiltEyes.setPeriodHertz(330);
 	tiltEyes.attach(23, 1000, 2000);
 //	// Create sensors and servers
-	//sensor = new GetIMU();
-	//sensor->startSensor();
+	sensor = new GetIMU();
+	/* Initialise the sensor */
+	if (!bno.begin()) {
+		/* There was a problem detecting the BNO055 ... check your connections */
+		Serial.print(
+				"Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
+		while (1)
+			;
+	}
+
+	delay(1000);
+	bno.setExtCrystalUse(true);
+	/* Display the current temperature */
+	int8_t temp = bno.getTemp();
+	Serial.print("Current Temperature: ");
+	Serial.print(temp);
+	Serial.println(" C");
+	Serial.println("");
+	sensor->startSensor(&bno);
 	myDFRobotIRPosition.begin();
 
 	// Attach coms
-	//coms.attach(sensor);
+	coms.attach(sensor);
 	coms.attach(new IRCamSimplePacketComsServer(&myDFRobotIRPosition));
 	coms.attach(new NameCheckerServer(name));
 
@@ -97,19 +116,15 @@ void loop() {
 		timerStartedCheck = true;
 		timer = timerBegin(3, 80, true);
 		timerAttachInterrupt(timer, &onTimer, true);
-		timerAlarmWrite(timer, 1000, true);// 1khz
+		timerAlarmWrite(timer, 1000, true); // 1khz
 		timerAlarmEnable(timer);
 	}
-	if (millis() - lastPrint > 50) {
+	if (millis() - lastPrint > 20) {
 		lastPrint = millis();
-		//control.readData();    // Read inputs and update maps
-		delay(1);
+		control.readData();    // Read inputs and update maps
 		//myDFRobotIRPosition.requestPosition();
-		delay(1);
 		//myDFRobotIRPosition.available();
-		delay(1);
-//		sensor->loop();
-//		delay(1);
+		sensor->loop();
 
 		float Servo1Val = mapf((float) control.values[1], 0.0, 255.0, -15.0,
 				15.0);
@@ -122,35 +137,39 @@ void loop() {
 				, 0, 255, 80, 160);
 		int tiltVal = map(control.values[3], 0, 255, 24, 120);    // z button
 
-		portENTER_CRITICAL(&timerMux);// Since PWM is called inside of the interrupt, this needs to wrap all other PWM's
+		portENTER_CRITICAL(&timerMux); // Since PWM is called inside of the interrupt, this needs to wrap all other PWM's
 		panEyes.write(panVal);
 		tiltEyes.write(tiltVal);
 		jaw.write(jawVal);
 		wristPtr->setTarget(Servo1Val, Servo3Val);
-		portEXIT_CRITICAL(&timerMux);// Since PWM is called inside of the interrupt, this needs to wrap all other PWM's
-
-		//Serial.println(" Pan  = " +String(panVal)+" tilt = " +String(tiltVal));
-		//Serial.println(" Angle of A = " +String(wristPtr->getA())+" Angle of B = " +String(wristPtr->getB()));
-//		Serial.println(
-//				" Tick of L = " + String((int32_t) motor1.getPosition())
-//						+ " Angle of R = "
-//						+ String((int32_t) motor2.getPosition()));
-//		for (int i = 0; i < WII_VALUES_ARRAY_SIZE; i++) {
+		portEXIT_CRITICAL(&timerMux); // Since PWM is called inside of the interrupt, this needs to wrap all other PWM's
+		if (print) {
 //			Serial.println(
-//					"\tVal " + String(i) + " = "
-//							+ String((uint8_t) control.values[i]));
-//		}
-
-//		if (!myDFRobotIRPosition.available()) {
-//			for (int i = 0; i < 4; i++) {
-//				Serial.print(myDFRobotIRPosition.readX(i));
-//				Serial.print(",");
-//
-//				Serial.print(myDFRobotIRPosition.readY(i));
-//				Serial.print(";");
+//					" Pan  = " + String(panVal) + " tilt = " + String(tiltVal));
+//			Serial.println(
+//					" Angle of A = " + String(wristPtr->getA())
+//							+ " Angle of B = " + String(wristPtr->getB()));
+//			Serial.println(
+//					" Tick of L = " + String((int32_t) motor1.getPosition())
+//							+ " Angle of R = "
+//							+ String((int32_t) motor2.getPosition()));
+//			for (int i = 0; i < WII_VALUES_ARRAY_SIZE; i++) {
+//				Serial.println(
+//						"\tVal " + String(i) + " = "
+//								+ String((uint8_t) control.values[i]));
 //			}
-//			Serial.println();
 //
-//		}
+//			if (!myDFRobotIRPosition.available()) {
+//				for (int i = 0; i < 4; i++) {
+//					Serial.print(myDFRobotIRPosition.readX(i));
+//					Serial.print(",");
+//
+//					Serial.print(myDFRobotIRPosition.readY(i));
+//					Serial.print(";");
+//				}
+//				Serial.println();
+//
+//			}
+		}
 	}
 }
