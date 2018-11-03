@@ -18,27 +18,33 @@
 #include <BNO055SimplePacketComs.h>
 #include <DFRobotIRPosition.h>
 #include "src/coms/IRCamSimplePacketComsServer.h"
-#define USE_WIFI
-#define USE_GAME_CONTOL
+//#define USE_WIFI
+//#define USE_GAME_CONTOL
 //#define USE_IR_CAM
-#define USE_IMU
+//#define USE_IMU
 //#define USE_TIMER
-#if defined(USE_GAME_CONTOL)
-Accessory control;
-#endif
+
 HBridgeEncoderPIDMotor motor1;
 HBridgeEncoderPIDMotor motor2;
 GearWrist * wristPtr;
 Servo tiltEyes;
 Servo jaw;
 Servo panEyes;
+bool timerStartedCheck = false;
+bool print = false;
+long lastPrint = 0;
+// Change this to set your team name
+String * name = new String("IMU-Team21");
+int numberOfPID = 2;
+PID * pidList[] = { &motor1.myPID, &motor2.myPID };
+
+#if defined(USE_GAME_CONTOL)
+Accessory control;
+#endif
 #if defined(USE_IMU)
 GetIMU * sensor;
 Adafruit_BNO055 bno;
 #endif
-long lastPrint = 0;
-// Change this to set your team name
-String * name = new String("IMU-Team21");
 #if defined(USE_WIFI)
 UDPSimplePacket coms;
 WifiManager manager;
@@ -46,16 +52,11 @@ WifiManager manager;
 #if defined(USE_IR_CAM)
 DFRobotIRPosition myDFRobotIRPosition;
 #endif
-int numberOfPID = 2;
-PID * pidList[] = { &motor1.myPID, &motor2.myPID };
 #if defined(USE_TIMER)
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
 hw_timer_t * timer = NULL;
 #endif
-bool timerStartedCheck = false;
-bool print = false;
 #if defined(USE_TIMER)
-
 void IRAM_ATTR onTimer() {
 	portENTER_CRITICAL_ISR(&timerMux);
 	wristPtr->loop();
@@ -64,18 +65,17 @@ void IRAM_ATTR onTimer() {
 }
 #endif
 void setup() {
-	Serial.begin(115200);
+
 #if defined(USE_WIFI)
 	manager.setup();
+#else
+	Serial.begin(115200);
 #endif
 	delay(100);
 	motor1.attach(2, 15, 36, 39);
 	motor2.attach(16, 4, 34, 35);
 	Serial.println("Starting Motors: 4");
-#if defined(USE_GAME_CONTOL)
-	control.begin();
-	control.readData();    // Read inputs and update maps
-#endif
+
 	// Create a module to deal with the demo wrist bevel gears
 	wristPtr = new GearWrist(&motor1, //right motor
 			&motor2, // left motor
@@ -93,6 +93,10 @@ void setup() {
 	jaw.attach(19, 1000, 2000);
 	tiltEyes.setPeriodHertz(330);
 	tiltEyes.attach(23, 1000, 2000);
+#if defined(USE_GAME_CONTOL)
+	control.begin();
+	control.readData();    // Read inputs and update maps
+#endif
 //	// Create sensors and servers
 #if defined(USE_IMU)
 	sensor = new GetIMU();
