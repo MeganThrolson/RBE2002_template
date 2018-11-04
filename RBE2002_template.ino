@@ -107,7 +107,7 @@ void setup() {
 				"Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
 		delay(1000);
 		while (1)
-			;
+		;
 	}
 
 	delay(1000);
@@ -138,14 +138,13 @@ void loop() {
 #if defined(USE_WIFI)
 	manager.loop();
 	if (manager.getState() == Connected)
-		coms.server();
+	coms.server();
 	else
-		return;
+	return;
 #endif
 #if defined(USE_TIMER)
 	if (!timerStartedCheck) {
 		timerStartedCheck = true;
-
 
 		timer = timerBegin(3, 80, true);
 		timerAttachInterrupt(timer, &onTimer, true);
@@ -163,14 +162,18 @@ void loop() {
 		lastPrint = millis();
 #if defined(USE_GAME_CONTOL)
 		//portENTER_CRITICAL(&timerMux);
-		control.readData();    // Read inputs and update maps
+		control.readData();// Read inputs and update maps
 		//portEXIT_CRITICAL(&timerMux);
 #endif
 #if defined(USE_IR_CAM)
+#if defined(USE_TIMER)
 		portENTER_CRITICAL(&timerMux);
+#endif
 		myDFRobotIRPosition.requestPosition();
 		myDFRobotIRPosition.available();
+#if defined(USE_TIMER)
 		portEXIT_CRITICAL(&timerMux);
+#endif
 #endif
 #if defined(USE_IMU)
 #if defined(USE_TIMER)
@@ -194,14 +197,14 @@ void loop() {
 				, 0, 255, 80, 160);
 		int tiltVal = map(control.values[3], 0, 255, 24, 120);// z button
 #if defined(USE_TIMER)
-		portENTER_CRITICAL(&timerMux);// Since PWM is called inside of the interrupt, this needs to wrap all other PWM's
+		portENTER_CRITICAL(&timerMux); // Since PWM is called inside of the interrupt, this needs to wrap all other PWM's
 #endif
 		panEyes.write(panVal);
 		tiltEyes.write(tiltVal);
 		jaw.write(jawVal);
 		wristPtr->setTarget(Servo1Val, Servo3Val);
 #if defined(USE_TIMER)
-		portEXIT_CRITICAL(&timerMux);// Since PWM is called inside of the interrupt, this needs to wrap all other PWM's
+		portEXIT_CRITICAL(&timerMux); // Since PWM is called inside of the interrupt, this needs to wrap all other PWM's
 #endif
 #endif
 		if (print) {
