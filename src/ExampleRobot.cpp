@@ -42,7 +42,7 @@ ExampleRobot::~ExampleRobot() {
 }
 
 void ExampleRobot::setup() {
-	if(state !=Startup)
+	if (state != Startup)
 		return;
 	state = StartTimer;
 #if defined(USE_WIFI)
@@ -111,10 +111,7 @@ void ExampleRobot::setup() {
 }
 
 void ExampleRobot::loop() {
-	if (millis() - lastPrint > 5) {
-
-		lastPrint = millis();
-
+	if (millis() - lastPrint > 1) {
 		switch (state) {
 		case Startup:
 			setup();
@@ -122,7 +119,7 @@ void ExampleRobot::loop() {
 			break;
 		case StartTimer:
 			startTimer();
-			state = readGame;// Start the sensor poll loop
+			state = readGame;    // Start the sensor poll loop
 			break;
 		case readGame:
 			runGameControl();
@@ -156,9 +153,11 @@ void ExampleRobot::loop() {
 			break;
 
 		}
-		printAll();// Print some values in a slow loop
+		printAll();    // Print some values in a slow loop
+		lastPrint = millis(); // ensure 1ms spacing between reads for Wifi to transact
 	}
-	fastLoop();// Run PID and wifi after State machine on all states
+	fastLoop();    // Run PID and wifi before State machine on all states
+
 }
 
 void ExampleRobot::startTimer() {
@@ -177,6 +176,8 @@ void ExampleRobot::startTimer() {
 }
 
 void ExampleRobot::fastLoop() {
+	if(state==Startup)// Do not run before startp
+		return;
 #if defined(USE_WIFI)
 	manager.loop();
 	if (manager.getState() == Connected)
@@ -195,13 +196,13 @@ void ExampleRobot::runGameControl() {
 	control.readData(); // Read inputs and update maps
 
 	float Servo1Val = mapf((float) control.values[1], 0.0, 255.0, -15.0, 15.0);
-	float Servo3Val = mapf((float) control.values[0], 0.0, 255.0, -60.0, 60.0); // z button
+	float Servo3Val = mapf((float) control.values[0], 0.0, 255.0, -60.0, 60.0);// z button
 	int panVal = map(control.values[2], 0, 255, 35, 148);
-	int jawVal = map(control.values[5] > 0 ? 0 :    // Upper button pressed
-			(control.values[18] > 0 ? 255 :    // Lower button pressed
-					128)    //neither pressed
+	int jawVal = map(control.values[5] > 0 ? 0 :// Upper button pressed
+			(control.values[18] > 0 ? 255 :// Lower button pressed
+					128)//neither pressed
 			, 0, 255, 80, 160);
-	int tiltVal = map(control.values[3], 0, 255, 24, 120);    // z button
+	int tiltVal = map(control.values[3], 0, 255, 24, 120);// z button
 #if defined(USE_TIMER)
 	portENTER_CRITICAL(&timerMux); // Since PWM is called inside of the interrupt, this needs to wrap all other PWM's
 #endif

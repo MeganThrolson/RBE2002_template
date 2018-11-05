@@ -75,7 +75,7 @@ private:
 	void fastLoop();
 	void startTimer();
 	void setup();
-	state_t state;
+	state_t state=Startup;
 public:
 	ExampleRobot();
 	virtual ~ExampleRobot();
