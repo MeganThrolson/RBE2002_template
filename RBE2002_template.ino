@@ -1,13 +1,8 @@
-#include "src/config.h"
 #include <PID_v1.h>
 #include <ESP32Servo.h>
 #include <ESP32Encoder.h>
-#include "src/PIDMotor.h"
-#include "src/ServoEncoderPIDMotor.h"
-#include "src/HBridgeEncoderPIDMotor.h"
 #include <Wire.h>
 #include <WiiChuck.h>
-#include "src/GearWrist.h"
 #include <Preferences.h>
 #include <WiFi.h>
 #include <SimplePacketComs.h>
@@ -18,14 +13,14 @@
 #include <Adafruit_BNO055.h>
 #include <BNO055SimplePacketComs.h>
 #include <DFRobotIRPosition.h>
-#include "src/coms/IRCamSimplePacketComsServer.h"
 
 #include "src/ExampleRobot.h"
 
 ExampleRobot exampleRobot;
 void setup() {
+	// let the state machine handle this
 }
 
 void loop() {
-	exampleRobot.loop();
+	exampleRobot.loop();// run the state machine pulse
 }

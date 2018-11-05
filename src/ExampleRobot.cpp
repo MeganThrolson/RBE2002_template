@@ -42,9 +42,9 @@ void ExampleRobot::setup() {
 	Serial.begin(115200);
 #endif
 	delay(100);
-	motor1.attach(2, 15, 36, 39);
-	motor2.attach(16, 4, 34, 35);
-	Serial.println("Starting Motors: 4");
+	motor1.attach(MOTOR1_PWM, MOTOR1_DIR, MOTOR1_ENCA,MOTOR2_ENCB);
+	motor2.attach(MOTOR2_PWM, MOTOR2_DIR, MOTOR1_ENCA, MOTOR2_ENCB);
+	Serial.println("Starting Motors");
 
 	// Create a module to deal with the demo wrist bevel gears
 	wristPtr = new GearWrist(&motor1, //right motor
@@ -58,11 +58,11 @@ void ExampleRobot::setup() {
 	wristPtrLocal = wristPtr;
 	// Set up digital servos
 	panEyes.setPeriodHertz(330);
-	panEyes.attach(18, 1000, 2000);
+	panEyes.attach(SERVO_PAN, 1000, 2000);
 	jaw.setPeriodHertz(330);
-	jaw.attach(19, 1000, 2000);
+	jaw.attach(SERVO_JAW, 1000, 2000);
 	tiltEyes.setPeriodHertz(330);
-	tiltEyes.attach(23, 1000, 2000);
+	tiltEyes.attach(SERVO_TILT, 1000, 2000);
 
 //	// Create sensors and servers
 #if defined(USE_IMU)
@@ -106,11 +106,7 @@ void ExampleRobot::loop() {
 		switch (state) {
 		case Startup:
 			setup();
-#if defined(USE_WIFI)
 			state = WaitForConnect;
-#else
-			state = StartTimer;
-#endif
 			break;
 		case WaitForConnect:
 #if defined(USE_WIFI)
