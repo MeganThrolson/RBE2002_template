@@ -74,11 +74,11 @@ private:
 	void printAll();
 	void fastLoop();
 	void startTimer();
+	void setup();
 	state_t state;
 public:
 	ExampleRobot();
 	virtual ~ExampleRobot();
-	void setup();
 	void loop();
 #if defined(USE_TIMER)
 	static portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;

@@ -24,8 +24,6 @@
 
 ExampleRobot exampleRobot;
 void setup() {
-
-	exampleRobot.setup();
 }
 
 void loop() {

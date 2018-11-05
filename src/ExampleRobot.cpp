@@ -29,9 +29,12 @@ ExampleRobot::ExampleRobot() {
 	pidList[1] = &motor2.myPID;
 	wristPtr = NULL;
 	state = Startup;
+#if defined(	USE_WIFI)
 #if defined(USE_IMU)
 	sensor = NULL;
 #endif
+#endif
+
 }
 
 ExampleRobot::~ExampleRobot() {
@@ -39,6 +42,9 @@ ExampleRobot::~ExampleRobot() {
 }
 
 void ExampleRobot::setup() {
+	if(state !=Startup)
+		return;
+	state = StartTimer;
 #if defined(USE_WIFI)
 	manager.setup();
 #else
@@ -87,6 +93,7 @@ void ExampleRobot::setup() {
 	bno.setExtCrystalUse(true);
 	sensor->startSensor(&bno);
 #endif
+
 #if defined(USE_IR_CAM)
 	myDFRobotIRPosition.begin();
 #endif
@@ -104,9 +111,6 @@ void ExampleRobot::setup() {
 }
 
 void ExampleRobot::loop() {
-
-	fastLoop();
-
 	if (millis() - lastPrint > 5) {
 
 		lastPrint = millis();
@@ -118,7 +122,7 @@ void ExampleRobot::loop() {
 			break;
 		case StartTimer:
 			startTimer();
-			state = readGame;
+			state = readGame;// Start the sensor poll loop
 			break;
 		case readGame:
 			runGameControl();
@@ -152,9 +156,9 @@ void ExampleRobot::loop() {
 			break;
 
 		}
-
-		printAll();
+		printAll();// Print some values in a slow loop
 	}
+	fastLoop();// Run PID and wifi after State machine on all states
 }
 
 void ExampleRobot::startTimer() {
