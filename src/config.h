@@ -9,10 +9,9 @@
 #define SRC_CONFIG_H_
 
 #define USE_WIFI
-//#define USE_GAME_CONTOL
+#define USE_GAME_CONTOL
 //#define USE_IR_CAM
 #define USE_IMU
-//#define USE_TIMER
 
 
 

@@ -8,16 +8,7 @@
 #include "ExampleRobot.h"
 
 static GearWrist * wristPtrLocal;
-#if defined(USE_TIMER)
-portMUX_TYPE ExampleRobot::timerMux = portMUX_INITIALIZER_UNLOCKED;
 
-void IRAM_ATTR onTimer() {
-	portENTER_CRITICAL_ISR(&ExampleRobot::timerMux);
-	wristPtrLocal->loop();
-	portEXIT_CRITICAL_ISR(&ExampleRobot::timerMux);
-
-}
-#endif
 
 float mapf(float x, float in_min, float in_max, float out_min, float out_max) {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -72,10 +63,7 @@ void ExampleRobot::setup() {
 	jaw.attach(19, 1000, 2000);
 	tiltEyes.setPeriodHertz(330);
 	tiltEyes.attach(23, 1000, 2000);
-#if defined(USE_GAME_CONTOL)
-	control.begin();
-	control.readData();    // Read inputs and update maps
-#endif
+
 //	// Create sensors and servers
 #if defined(USE_IMU)
 	sensor = new GetIMU();
@@ -107,7 +95,10 @@ void ExampleRobot::setup() {
 #endif
 	coms.attach(new NameCheckerServer(name));
 #endif
-	// PID control loop timer
+#if defined(USE_GAME_CONTOL)
+	control.begin();
+	control.readData();    // Read inputs and update maps
+#endif
 }
 
 void ExampleRobot::loop() {
@@ -137,27 +128,15 @@ void ExampleRobot::loop() {
 			break;
 		case readIMU:
 #if defined(USE_IMU)
-#if defined(USE_TIMER)
-			portENTER_CRITICAL(&timerMux);
-#endif
 			sensor->loop();
-#if defined(USE_TIMER)
-			portEXIT_CRITICAL(&timerMux);
-#endif
 			sensor->print();
 #endif
 			state = readIR;
 			break;
 		case readIR:
 #if defined(USE_IR_CAM)
-#if defined(USE_TIMER)
-			portENTER_CRITICAL(&timerMux);
-#endif
 			myDFRobotIRPosition.requestPosition();
 			myDFRobotIRPosition.available();
-#if defined(USE_TIMER)
-			portEXIT_CRITICAL(&timerMux);
-#endif
 #endif
 			state = readGame;    // loop back to start of sensors
 			break;
@@ -196,9 +175,8 @@ void ExampleRobot::fastLoop() {
 		return;
 	}
 #endif
-#if !defined(USE_TIMER)
 	wristPtr->loop();
-#endif
+
 }
 
 void ExampleRobot::runGameControl() {
@@ -213,16 +191,11 @@ void ExampleRobot::runGameControl() {
 					128)//neither pressed
 			, 0, 255, 80, 160);
 	int tiltVal = map(control.values[3], 0, 255, 24, 120);// z button
-#if defined(USE_TIMER)
-	portENTER_CRITICAL(&timerMux); // Since PWM is called inside of the interrupt, this needs to wrap all other PWM's
-#endif
 	panEyes.write(panVal);
 	tiltEyes.write(tiltVal);
 	jaw.write(jawVal);
 	wristPtr->setTarget(Servo1Val, Servo3Val);
-#if defined(USE_TIMER)
-	portEXIT_CRITICAL(&timerMux); // Since PWM is called inside of the interrupt, this needs to wrap all other PWM's
-#endif
+
 #endif
 
 }

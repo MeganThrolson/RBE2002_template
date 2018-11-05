@@ -48,7 +48,7 @@ private:
 	Servo jaw;
 	Servo panEyes;
 	bool timerStartedCheck = false;
-	bool print = false;
+	bool print = true;
 	long lastPrint = 0;
 	// Change this to set your team name
 	String * name = new String("IMU-Team21");
@@ -68,9 +68,7 @@ private:
 	#if defined(USE_IR_CAM)
 	DFRobotIRPosition myDFRobotIRPosition;
 	#endif
-	#if defined(USE_TIMER)
-	hw_timer_t * timer = NULL;
-	#endif
+
 	void runGameControl();
 	void printAll();
 	void fastLoop();
@@ -81,9 +79,7 @@ public:
 	ExampleRobot();
 	virtual ~ExampleRobot();
 	void loop();
-#if defined(USE_TIMER)
-	static portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
-#endif
+
 };
 
 #endif /* SRC_EXAMPLEROBOT_H_ */
