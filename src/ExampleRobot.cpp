@@ -54,9 +54,7 @@ void ExampleRobot::loop() {
 float mapf(float x, float in_min, float in_max, float out_min, float out_max) {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
-
 ExampleRobot::ExampleRobot() {
-	// TODO Auto-generated constructor stub
 	pidList[0] = &motor1.myPID;
 	pidList[1] = &motor2.myPID;
 	wristPtr = NULL;
