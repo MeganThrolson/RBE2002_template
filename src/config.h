@@ -21,8 +21,8 @@
 #define MOTOR2_DIR 4
 
 #define MOTOR1_ENCA 36
-#define MOTOR2_ENCB 39
-#define MOTOR1_ENCA 34
+#define MOTOR1_ENCB 39
+#define MOTOR2_ENCA 34
 #define MOTOR2_ENCB 35
 
 #define SERVO_PAN 18

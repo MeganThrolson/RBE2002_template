@@ -25,6 +25,7 @@ ExampleRobot::ExampleRobot() {
 	sensor = NULL;
 #endif
 #endif
+	name = new String("IMU-Team21");
 
 }
 
@@ -35,15 +36,15 @@ ExampleRobot::~ExampleRobot() {
 void ExampleRobot::setup() {
 	if (state != Startup)
 		return;
-	state = StartTimer;
+	state = WaitForConnect;
 #if defined(USE_WIFI)
 	manager.setup();
 #else
 	Serial.begin(115200);
 #endif
 	delay(100);
-	motor1.attach(MOTOR1_PWM, MOTOR1_DIR, MOTOR1_ENCA,MOTOR2_ENCB);
-	motor2.attach(MOTOR2_PWM, MOTOR2_DIR, MOTOR1_ENCA, MOTOR2_ENCB);
+	motor1.attach(MOTOR1_PWM, MOTOR1_DIR, MOTOR1_ENCA,MOTOR1_ENCB);
+	motor2.attach(MOTOR2_PWM, MOTOR2_DIR, MOTOR2_ENCA, MOTOR2_ENCB);
 	Serial.println("Starting Motors");
 
 	// Create a module to deal with the demo wrist bevel gears
@@ -102,7 +103,7 @@ void ExampleRobot::setup() {
 }
 
 void ExampleRobot::loop() {
-	if (millis() - lastPrint > 1) {
+	if (esp_timer_get_time() - lastPrint > 500) {
 		switch (state) {
 		case Startup:
 			setup();
@@ -112,11 +113,7 @@ void ExampleRobot::loop() {
 #if defined(USE_WIFI)
 			if(manager.getState() == Connected)
 #endif
-				state = StartTimer;
-			break;
-		case StartTimer:
-			startTimer();
-			state = readGame;    // Start the sensor poll loop
+				state = readGame;// begin the main opperation loop
 			break;
 		case readGame:
 			runGameControl();
@@ -140,26 +137,13 @@ void ExampleRobot::loop() {
 
 		}
 		printAll();    // Print some values in a slow loop
-		lastPrint = millis(); // ensure 1ms spacing between reads for Wifi to transact
+		lastPrint = esp_timer_get_time(); // ensure 0.5 ms spacing *between* reads for Wifi to transact
 	}
-	fastLoop();    // Run PID and wifi before State machine on all states
+	// If this is run before the sensor reads, the I2C will fail because the time it takes to send the UDP causes a timeout
+	fastLoop();    // Run PID and wifi after State machine on all states
 
 }
 
-void ExampleRobot::startTimer() {
-#if defined(USE_TIMER)
-	if (!timerStartedCheck) {
-		timerStartedCheck = true;
-
-		timer = timerBegin(3, 80, true);
-		timerAttachInterrupt(timer, &onTimer, true);
-		timerAlarmWrite(timer, 1000, true); // 1khz
-		timerAlarmEnable(timer);
-		Serial.println("Timer started");
-
-	}
-#endif
-}
 
 void ExampleRobot::fastLoop() {
 	if(state==Startup)// Do not run before startp

@@ -21,7 +21,7 @@ void PIDMotor::pidinit() {
 	myPID.SetMode(AUTOMATIC);
 	myPID.SetOutputLimits(-PID_OUTPUT_COMPUTE_RANGE, PID_OUTPUT_COMPUTE_RANGE);
 	myPID.SetTunings(Kp, Ki, Kd, P_ON_E);
-	myPID.SetSampleTime(1);
+	myPID.SetSampleTime(5);
 }
 
 void PIDMotor::loop() {

@@ -32,51 +32,65 @@
 enum state_t {
 	Startup,
 	WaitForConnect,
-	StartTimer,
 	readGame,
 	readIMU,
-	readIR,
+	readIR
+	// Add more states here and be sure to add them to the cycle
 };
 #define numberOfPID  2
 
 class ExampleRobot {
 private:
-	HBridgeEncoderPIDMotor motor1;
-	HBridgeEncoderPIDMotor motor2;
-	GearWrist * wristPtr;
+	HBridgeEncoderPIDMotor motor1;  // PID controlled motor object
+	HBridgeEncoderPIDMotor motor2; // PID controlled motor object
+	GearWrist * wristPtr; // An object to mux/demux the 2 motors using the bevel gear differential.
+	// Servo objects
 	Servo tiltEyes;
 	Servo jaw;
 	Servo panEyes;
-	bool timerStartedCheck = false;
-	long lastPrint = 0;
+	// A value to check if enough time has elapsed to tun the sensors and prints
+	int64_t lastPrint = 0;
 	// Change this to set your team name
-	String * name = new String("IMU-Team21");
+	String * name;//
+	// List of PID objects to use with PID server
 	PID * pidList[numberOfPID];// = { &motor1.myPID, &motor2.myPID };
 
 	#if defined(USE_GAME_CONTOL)
+	//Wii game pad
 	Accessory control;
 	#endif
 	#if defined(USE_IMU)
+	// Simple packet coms server for IMU
 	GetIMU * sensor;
+	// The IMU object
 	Adafruit_BNO055 bno;
 	#endif
 	#if defined(USE_WIFI)
+	// SImple packet coms implementation useing WiFi
 	UDPSimplePacket coms;
+	// WIfi stack managment state machine
 	WifiManager manager;
+
 	#endif
 	#if defined(USE_IR_CAM)
+	// IR camera
 	DFRobotIRPosition myDFRobotIRPosition;
 	#endif
-
+	// RUn the game control logic
 	void runGameControl();
+	// Print the values of the robot
 	void printAll();
+	// The fast loop actions
+	// This should be run every loop and is internally gated for fast opperation
 	void fastLoop();
-	void startTimer();
+	// Internal setup function. set up all objects
 	void setup();
+	// State machine state
 	state_t state=Startup;
 public:
 	ExampleRobot();
 	virtual ~ExampleRobot();
+	// Pulse the loop function from the main thread
 	void loop();
 
 };
