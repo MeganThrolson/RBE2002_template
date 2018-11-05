@@ -115,7 +115,17 @@ void ExampleRobot::loop() {
 		switch (state) {
 		case Startup:
 			setup();
+#if defined(USE_WIFI)
+			state = WaitForConnect;
+#else
 			state = StartTimer;
+#endif
+			break;
+		case WaitForConnect:
+#if defined(USE_WIFI)
+			if(manager.getState() == Connected)
+#endif
+				state = StartTimer;
 			break;
 		case StartTimer:
 			startTimer();

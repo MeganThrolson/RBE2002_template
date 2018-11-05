@@ -31,6 +31,7 @@
 
 enum state_t {
 	Startup,
+	WaitForConnect,
 	StartTimer,
 	readGame,
 	readIMU,
