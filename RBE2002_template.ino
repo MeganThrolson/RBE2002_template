@@ -13,6 +13,7 @@
 #include <Adafruit_BNO055.h>
 #include <BNO055SimplePacketComs.h>
 #include <DFRobotIRPosition.h>
+#include <SPI.h>
 
 #include "src/ExampleRobot.h"
 
