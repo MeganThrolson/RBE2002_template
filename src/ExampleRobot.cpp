@@ -7,8 +7,49 @@
 
 #include "ExampleRobot.h"
 
-static GearWrist * wristPtrLocal;
+void ExampleRobot::loop() {
+	if (esp_timer_get_time() - lastPrint > 500||
+			esp_timer_get_time() < lastPrint// check for the wrap over case
+			) {
+		switch (state) {
+		case Startup:
+			setup();
+			state = WaitForConnect;
+			break;
+		case WaitForConnect:
+#if defined(USE_WIFI)
+			if(manager.getState() == Connected)
+#endif
+				state = readGame;// begin the main opperation loop
+			break;
+		case readGame:
+			runGameControl();
+			state = readIMU;
+			break;
+		case readIMU:
+#if defined(USE_IMU)
+			sensor->loop();
+			if(PRINTROBOTDATA)
+				sensor->print();
+#endif
+			state = readIR;
+			break;
+		case readIR:
+#if defined(USE_IR_CAM)
+			myDFRobotIRPosition.requestPosition();
+			myDFRobotIRPosition.available();
+#endif
+			state = readGame;    // loop back to start of sensors
+			break;
 
+		}
+		printAll();    // Print some values in a slow loop
+		lastPrint = esp_timer_get_time(); // ensure 0.5 ms spacing *between* reads for Wifi to transact
+	}
+	// If this is run before the sensor reads, the I2C will fail because the time it takes to send the UDP causes a timeout
+	fastLoop();    // Run PID and wifi after State machine on all states
+
+}
 
 float mapf(float x, float in_min, float in_max, float out_min, float out_max) {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -56,7 +97,6 @@ void ExampleRobot::setup() {
 					(1.0 / 360.0) * // degrees per revolution
 					motor1.encoder.countsMode, // full quadrature, 4 ticks be encoder count, half is 2 and single mode is one
 			0.8932); // ratio of second stage to first stage
-	wristPtrLocal = wristPtr;
 	// Set up digital servos
 	panEyes.setPeriodHertz(330);
 	panEyes.attach(SERVO_PAN, 1000, 2000);
@@ -101,49 +141,6 @@ void ExampleRobot::setup() {
 	control.readData();    // Read inputs and update maps
 #endif
 }
-
-void ExampleRobot::loop() {
-	if (esp_timer_get_time() - lastPrint > 500) {
-		switch (state) {
-		case Startup:
-			setup();
-			state = WaitForConnect;
-			break;
-		case WaitForConnect:
-#if defined(USE_WIFI)
-			if(manager.getState() == Connected)
-#endif
-				state = readGame;// begin the main opperation loop
-			break;
-		case readGame:
-			runGameControl();
-			state = readIMU;
-			break;
-		case readIMU:
-#if defined(USE_IMU)
-			sensor->loop();
-			if(PRINTROBOTDATA)
-				sensor->print();
-#endif
-			state = readIR;
-			break;
-		case readIR:
-#if defined(USE_IR_CAM)
-			myDFRobotIRPosition.requestPosition();
-			myDFRobotIRPosition.available();
-#endif
-			state = readGame;    // loop back to start of sensors
-			break;
-
-		}
-		printAll();    // Print some values in a slow loop
-		lastPrint = esp_timer_get_time(); // ensure 0.5 ms spacing *between* reads for Wifi to transact
-	}
-	// If this is run before the sensor reads, the I2C will fail because the time it takes to send the UDP causes a timeout
-	fastLoop();    // Run PID and wifi after State machine on all states
-
-}
-
 
 void ExampleRobot::fastLoop() {
 	if(state==Startup)// Do not run before startp
