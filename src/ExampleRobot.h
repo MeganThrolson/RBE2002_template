@@ -48,7 +48,6 @@ private:
 	Servo jaw;
 	Servo panEyes;
 	bool timerStartedCheck = false;
-	bool print = true;
 	long lastPrint = 0;
 	// Change this to set your team name
 	String * name = new String("IMU-Team21");

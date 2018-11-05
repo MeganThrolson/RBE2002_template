@@ -129,7 +129,8 @@ void ExampleRobot::loop() {
 		case readIMU:
 #if defined(USE_IMU)
 			sensor->loop();
-			sensor->print();
+			if(PRINTROBOTDATA)
+				sensor->print();
 #endif
 			state = readIR;
 			break;
@@ -200,7 +201,7 @@ void ExampleRobot::runGameControl() {
 
 }
 void ExampleRobot::printAll() {
-	if (print) {
+	if (PRINTROBOTDATA) {
 //			Serial.println(
 //					" Pan  = " + String(panVal) + " tilt = " + String(tiltVal));
 		Serial.println(

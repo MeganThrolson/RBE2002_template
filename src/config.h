@@ -12,7 +12,7 @@
 #define USE_GAME_CONTOL
 //#define USE_IR_CAM
 #define USE_IMU
-
+#define PRINTROBOTDATA false
 
 
 #endif /* SRC_CONFIG_H_ */
