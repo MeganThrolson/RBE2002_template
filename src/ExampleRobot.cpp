@@ -20,7 +20,7 @@ void ExampleRobot::loop() {
 #if defined(USE_WIFI)
 			if(manager.getState() == Connected)
 #endif
-				state = readGame;// begin the main opperation loop
+				state = readGame;// begin the main operation loop
 			break;
 		case readGame:
 			runGameControl();
