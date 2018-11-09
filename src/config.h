@@ -10,7 +10,7 @@
 
 #define USE_WIFI
 #define USE_GAME_CONTOL
-//#define USE_IR_CAM
+#define USE_IR_CAM
 #define USE_IMU
 #define PRINTROBOTDATA false
 

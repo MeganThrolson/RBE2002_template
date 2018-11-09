@@ -36,8 +36,7 @@ void ExampleRobot::loop() {
 			break;
 		case readIR:
 #if defined(USE_IR_CAM)
-			myDFRobotIRPosition.requestPosition();
-			myDFRobotIRPosition.available();
+			serverIR->loop();
 #endif
 			state = readGame;    // loop back to start of sensors
 			break;
@@ -62,6 +61,9 @@ ExampleRobot::ExampleRobot() {
 #if defined(	USE_WIFI)
 #if defined(USE_IMU)
 	sensor = NULL;
+#endif
+#if defined(USE_IR_CAM)
+	serverIR = NULL;
 #endif
 #endif
 	name = new String("IMU-Team21");
@@ -130,7 +132,8 @@ void ExampleRobot::setup() {
 	coms.attach(sensor);
 #endif
 #if defined(USE_IR_CAM)
-	coms.attach(new IRCamSimplePacketComsServer(&myDFRobotIRPosition));
+	serverIR =new IRCamSimplePacketComsServer(&myDFRobotIRPosition);
+	coms.attach(serverIR);
 #endif
 	coms.attach(new NameCheckerServer(name));
 #endif

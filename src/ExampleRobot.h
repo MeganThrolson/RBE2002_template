@@ -76,6 +76,7 @@ private:
 	#if defined(USE_IR_CAM)
 	// IR camera
 	DFRobotIRPosition myDFRobotIRPosition;
+	IRCamSimplePacketComsServer * serverIR;
 	#endif
 	// RUn the game control logic
 	void runGameControl();

@@ -13,10 +13,12 @@
 class IRCamSimplePacketComsServer: public PacketEventAbstract {
 private:
 	DFRobotIRPosition * camera;
+	float  bufferCache[8];
 public:
 	IRCamSimplePacketComsServer(DFRobotIRPosition * cam);
 	virtual ~IRCamSimplePacketComsServer();
 	void event(float * buffer);
+	void loop();
 };
 
 #endif /* SRC_COMS_IRCAMSIMPLEPACKETCOMSSERVER_H_ */
