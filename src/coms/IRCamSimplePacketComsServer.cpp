@@ -24,15 +24,37 @@ void IRCamSimplePacketComsServer::event(float * buffer) {
 }
 
 void IRCamSimplePacketComsServer::loop() {
-	camera->requestPosition();
 	int64_t start = esp_timer_get_time();
-	while (Wire.available() != 16 && ((esp_timer_get_time() - start) < 750))
+	while (Wire.available() > 0 && ((esp_timer_get_time() - start) < 1250)) {
+		Wire.read(); // clear junk bytes
+	}
+	camera->requestPosition();
+	start = esp_timer_get_time();
+	while (Wire.available() < 16 && ((esp_timer_get_time() - start) < 12500))
 		;
+//	Serial.println(" Camera read in "+String(
+//			((int)(esp_timer_get_time() - start))
+//			));
 
 	if (camera->available()) {
 		for (int i = 0; i < 4; i++) {
-			bufferCache[(i * 2)] = camera->readX(i);
-			bufferCache[(i * 2) + 1] = camera->readY(i);
+			bufferCache[(i * 2)] = ((float) camera->readX(i)); ///1024.0;
+			//bufferCache[(i * 2)] = bufferCache[(i * 2)]>0?33.0/bufferCache[(i * 2)]:0;
+			bufferCache[(i * 2) + 1] = ((float) camera->readY(i));	///1024.0;
+			//bufferCache[(i * 2) + 1] = bufferCache[(i * 2) + 1]>0?23.0/bufferCache[(i * 2) + 1]:0;
 		}
+
 	}
+
+}
+
+void IRCamSimplePacketComsServer::print() {
+	for (int i = 0; i < 4; i++) {
+		Serial.print(bufferCache[(i * 2)]);
+		Serial.print(",");
+
+		Serial.print(bufferCache[(i * 2)]);
+		Serial.print(";");
+	}
+	Serial.println();
 }

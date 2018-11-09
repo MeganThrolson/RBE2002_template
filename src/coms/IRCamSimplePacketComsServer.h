@@ -19,6 +19,7 @@ public:
 	virtual ~IRCamSimplePacketComsServer();
 	void event(float * buffer);
 	void loop();
+	void print();
 };
 
 #endif /* SRC_COMS_IRCAMSIMPLEPACKETCOMSSERVER_H_ */

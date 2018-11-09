@@ -8,9 +8,9 @@
 #include "ExampleRobot.h"
 
 void ExampleRobot::loop() {
-	if (esp_timer_get_time() - lastPrint > 500||
-			esp_timer_get_time() < lastPrint// check for the wrap over case
-			) {
+	if (esp_timer_get_time() - lastPrint > 500
+			|| esp_timer_get_time() < lastPrint // check for the wrap over case
+					) {
 		switch (state) {
 		case Startup:
 			setup();
@@ -18,9 +18,9 @@ void ExampleRobot::loop() {
 			break;
 		case WaitForConnect:
 #if defined(USE_WIFI)
-			if(manager.getState() == Connected)
+			if (manager.getState() == Connected)
 #endif
-				state = readGame;// begin the main operation loop
+				state = readGame; // begin the main operation loop
 			break;
 		case readGame:
 			runGameControl();
@@ -29,14 +29,16 @@ void ExampleRobot::loop() {
 		case readIMU:
 #if defined(USE_IMU)
 			sensor->loop();
-			if(PRINTROBOTDATA)
-				sensor->print();
+//			if (PRINTROBOTDATA)
+//				sensor->print();
 #endif
 			state = readIR;
 			break;
 		case readIR:
 #if defined(USE_IR_CAM)
 			serverIR->loop();
+			if (PRINTROBOTDATA)
+				serverIR->print();
 #endif
 			state = readGame;    // loop back to start of sensors
 			break;
@@ -84,7 +86,7 @@ void ExampleRobot::setup() {
 	Serial.begin(115200);
 #endif
 	delay(100);
-	motor1.attach(MOTOR1_PWM, MOTOR1_DIR, MOTOR1_ENCA,MOTOR1_ENCB);
+	motor1.attach(MOTOR1_PWM, MOTOR1_DIR, MOTOR1_ENCA, MOTOR1_ENCB);
 	motor2.attach(MOTOR2_PWM, MOTOR2_DIR, MOTOR2_ENCA, MOTOR2_ENCB);
 	Serial.println("Starting Motors");
 
@@ -132,7 +134,7 @@ void ExampleRobot::setup() {
 	coms.attach(sensor);
 #endif
 #if defined(USE_IR_CAM)
-	serverIR =new IRCamSimplePacketComsServer(&myDFRobotIRPosition);
+	serverIR = new IRCamSimplePacketComsServer(&myDFRobotIRPosition);
 	coms.attach(serverIR);
 #endif
 	coms.attach(new NameCheckerServer(name));
@@ -144,7 +146,7 @@ void ExampleRobot::setup() {
 }
 
 void ExampleRobot::fastLoop() {
-	if(state==Startup)// Do not run before startp
+	if (state == Startup)    // Do not run before startp
 		return;
 #if defined(USE_WIFI)
 	manager.loop();
@@ -163,13 +165,13 @@ void ExampleRobot::runGameControl() {
 	control.readData(); // Read inputs and update maps
 
 	float Servo1Val = mapf((float) control.values[1], 0.0, 255.0, -15.0, 15.0);
-	float Servo3Val = mapf((float) control.values[0], 0.0, 255.0, -60.0, 60.0);// z button
+	float Servo3Val = mapf((float) control.values[0], 0.0, 255.0, -60.0, 60.0); // z button
 	int panVal = map(control.values[2], 0, 255, 35, 148);
-	int jawVal = map(control.values[5] > 0 ? 0 :// Upper button pressed
-			(control.values[18] > 0 ? 255 :// Lower button pressed
-					128)//neither pressed
+	int jawVal = map(control.values[5] > 0 ? 0 : // Upper button pressed
+			(control.values[18] > 0 ? 255 : // Lower button pressed
+					128) //neither pressed
 			, 0, 255, 80, 160);
-	int tiltVal = map(control.values[3], 0, 255, 24, 120);// z button
+	int tiltVal = map(control.values[3], 0, 255, 24, 120); // z button
 	panEyes.write(panVal);
 	tiltEyes.write(tiltVal);
 	jaw.write(jawVal);
@@ -182,9 +184,9 @@ void ExampleRobot::printAll() {
 	if (PRINTROBOTDATA) {
 //			Serial.println(
 //					" Pan  = " + String(panVal) + " tilt = " + String(tiltVal));
-		Serial.println(
-				" Angle of A = " + String(wristPtr->getA()) + " Angle of B = "
-						+ String(wristPtr->getB()));
+//		Serial.println(
+//				" Angle of A = " + String(wristPtr->getA()) + " Angle of B = "
+//						+ String(wristPtr->getB()));
 //			Serial.println(
 //					" Tick of L = " + String((int32_t) motor1.getPosition())
 //							+ " Angle of R = "
@@ -195,16 +197,6 @@ void ExampleRobot::printAll() {
 //								+ String((uint8_t) control.values[i]));
 //			}
 //
-//			if (!myDFRobotIRPosition.available()) {
-//				for (int i = 0; i < 4; i++) {
-//					Serial.print(myDFRobotIRPosition.readX(i));
-//					Serial.print(",");
-//
-//					Serial.print(myDFRobotIRPosition.readY(i));
-//					Serial.print(";");
-//				}
-//				Serial.println();
-//
-//			}
+
 	}
 }
