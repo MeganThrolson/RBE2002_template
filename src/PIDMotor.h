@@ -25,6 +25,7 @@ public:
 	void setSetpoint(int64_t val);
 	void SetTunings(double Kp, double Ki, double Kd);
 	void pidinit();
+	float getSetPoint();
 	virtual int64_t getPosition()=0;
 	virtual int64_t getOutputMin()=0;
 	virtual int64_t getOutputMax()=0;

@@ -29,6 +29,9 @@
 #include <BNO055SimplePacketComs.h>
 #include <DFRobotIRPosition.h>
 #include "coms/IRCamSimplePacketComsServer.h"
+#include "coms/GetPIDConfigureSimplePacketComsServer.h"
+#include "coms/GetPIDData.h"
+#include "coms/PIDConfigureSimplePacketComsServer.h"
 
 enum state_t {
 	Startup,
@@ -54,7 +57,7 @@ private:
 	// Change this to set your team name
 	String * name;//
 	// List of PID objects to use with PID server
-	PID * pidList[numberOfPID];// = { &motor1.myPID, &motor2.myPID };
+	 PIDMotor * pidList[numberOfPID];// = { &motor1.myPID, &motor2.myPID };
 
 	#if defined(USE_GAME_CONTOL)
 	//Wii game pad
@@ -87,6 +90,8 @@ private:
 	void fastLoop();
 	// Internal setup function. set up all objects
 	void setup();
+	//attach the PID servers
+	void setupPIDServers();
 	// State machine state
 	state_t state=Startup;
 public:

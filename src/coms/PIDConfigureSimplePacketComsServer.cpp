@@ -8,7 +8,7 @@
 #include "PIDConfigureSimplePacketComsServer.h"
 
 PIDConfigureSimplePacketComsServer::PIDConfigureSimplePacketComsServer(int num,
-		PID ** list) :
+		PIDMotor ** list) :
 		PacketEventAbstract(1900) {
 	numPID = num;
 	pidlist = list;

@@ -55,6 +55,9 @@ void PIDMotor::overrideCurrentPosition(int64_t val) {
 void PIDMotor::setSetpoint(int64_t val) {
 	Setpoint = (float) val;
 }
+float PIDMotor::getSetPoint(){
+	return Setpoint;
+}
 void PIDMotor::SetTunings(double Kp, double Ki, double Kd) {
 	this->Kp = Kp;
 	this->Ki = Ki;

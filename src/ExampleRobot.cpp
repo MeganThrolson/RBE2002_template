@@ -56,8 +56,8 @@ float mapf(float x, float in_min, float in_max, float out_min, float out_max) {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 ExampleRobot::ExampleRobot() {
-	pidList[0] = &motor1.myPID;
-	pidList[1] = &motor2.myPID;
+	pidList[0] = &motor1;
+	pidList[1] = &motor2;
 	wristPtr = NULL;
 	state = Startup;
 #if defined(	USE_WIFI)
@@ -75,7 +75,14 @@ ExampleRobot::ExampleRobot() {
 ExampleRobot::~ExampleRobot() {
 	// TODO Auto-generated destructor stub
 }
+void ExampleRobot::setupPIDServers(){
+	coms.attach(new PIDConfigureSimplePacketComsServer(numberOfPID,pidList));
+	coms.attach(new GetPIDData(numberOfPID,pidList));
+	coms.attach(new GetPIDConfigureSimplePacketComsServer(numberOfPID,pidList));
 
+
+
+}
 void ExampleRobot::setup() {
 	if (state != Startup)
 		return;
@@ -138,6 +145,7 @@ void ExampleRobot::setup() {
 	coms.attach(serverIR);
 #endif
 	coms.attach(new NameCheckerServer(name));
+	setupPIDServers();
 #endif
 #if defined(USE_GAME_CONTOL)
 	control.begin();

@@ -8,13 +8,12 @@
 #ifndef SRC_COMSGet_PIDCONFIGURESIMPLEPACKETCOMSSERVER_H_
 #define SRC_COMGetS_PIDCONFIGURESIMPLEPACKETCOMSSERVER_H_
 #include <SimplePacketComs.h>
-#include <PID_v1.h>
-
+#include <PIDMotor.h>
 class GetPIDConfigureSimplePacketComsServer: public PacketEventAbstract {
-	PID ** pidlist;
+	PIDMotor ** pidlist;
 	int numPID;
 public:
-	GetPIDConfigureSimplePacketComsServer(int num,PID ** list);
+	GetPIDConfigureSimplePacketComsServer(int num,PIDMotor ** list);
 	void event(float * buffer);
 
 };
