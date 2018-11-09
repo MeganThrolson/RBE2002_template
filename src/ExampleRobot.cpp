@@ -80,8 +80,6 @@ void ExampleRobot::setupPIDServers(){
 	coms.attach(new GetPIDData(numberOfPID,pidList));
 	coms.attach(new GetPIDConfigureSimplePacketComsServer(numberOfPID,pidList));
 
-
-
 }
 void ExampleRobot::setup() {
 	if (state != Startup)

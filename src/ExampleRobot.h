@@ -7,7 +7,9 @@
 
 #ifndef SRC_EXAMPLEROBOT_H_
 #define SRC_EXAMPLEROBOT_H_
+#if defined(Arduino_h)
 #include <Arduino.h>
+#endif
 #include "config.h"
 #include <PID_v1.h>
 #include <ESP32Servo.h>
