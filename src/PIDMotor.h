@@ -13,7 +13,7 @@
 class PIDMotor {
 protected:
 
-	float Kp=2, Ki=0, Kd=0;
+	float Kp=2, Ki=1.5, Kd=0.1;
 	double Setpoint=0, Input=0, Output=0;
 	bool lastErrPositive=false;
 public:
