@@ -49,12 +49,13 @@ void IRCamSimplePacketComsServer::loop() {
 }
 
 void IRCamSimplePacketComsServer::print() {
+	Serial.print("\r\nValues\r\n");
 	for (int i = 0; i < 4; i++) {
+		Serial.print("\t");
 		Serial.print(bufferCache[(i * 2)]);
 		Serial.print(",");
 
-		Serial.print(bufferCache[(i * 2)]);
-		Serial.print(";");
+		Serial.print(bufferCache[(i * 2)+1]);
+		Serial.print(";\r\n");
 	}
-	Serial.println();
 }
