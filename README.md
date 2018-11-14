@@ -5,7 +5,7 @@ Template code for the RBE 2002 final project
 
 See: https://github.com/WPIRoboticsEngineering/RobotInterfaceBoard
 
-# Development Computer Options  
+# Arduino Setup and Development Computer Options 
 
 See: https://github.com/WPIRoboticsEngineering/RobotInterfaceBoard#development-computer-options
 
