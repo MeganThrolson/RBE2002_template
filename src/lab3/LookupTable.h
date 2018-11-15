@@ -10,12 +10,12 @@
 
 //lookup table class
 class Lookup {
-  public:
-    Lookup();
-    //lookup torque function
-    float torque(float current,float rpm);
+public:
+	Lookup();
+	//lookup torque function
+	float torque(float current, float rpm);
 
-  private:
+private:
 
 };
 
