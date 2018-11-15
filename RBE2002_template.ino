@@ -17,7 +17,7 @@
 
 #include "src/ExampleRobot.h"
 
-ExampleRobot exampleRobot;
+ExampleRobot exampleRobot(new String("IMU-Team21"));
 void setup() {
 	// let the state machine handle this
 }

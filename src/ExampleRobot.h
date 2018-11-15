@@ -97,7 +97,7 @@ private:
 	// State machine state
 	state_t state=Startup;
 public:
-	ExampleRobot();
+	ExampleRobot(String * name);
 	virtual ~ExampleRobot();
 	// Pulse the loop function from the main thread
 	void loop();
