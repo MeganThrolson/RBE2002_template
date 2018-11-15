@@ -176,7 +176,7 @@ void ExampleRobot::runGameControl() {
 	int jawVal = map(control.values[5] > 0 ? 0 : // Upper button pressed
 			(control.values[18] > 0 ? 255 : // Lower button pressed
 					128) //neither pressed
-			, 0, 255, 80, 160);
+			, 0, 255, 80, 140);
 	int tiltVal = map(control.values[3], 0, 255, 24, 120); // z button
 	panEyes.write(panVal);
 	tiltEyes.write(tiltVal);

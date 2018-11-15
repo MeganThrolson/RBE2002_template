@@ -49,3 +49,11 @@ void HBridgeEncoderPIDMotor::setOutput(int64_t out){
 void HBridgeEncoderPIDMotor::overrideCurrentPositionHardware(int64_t val){
 	encoder.setCount(val);
 }
+//This function should analogRead the current sense from the motor driver
+//and convert the value to current in milliamps
+double HBridgeEncoderPIDMotor::calcCur(void)
+{
+  //read analog value
+  //convert to volts
+  //converts to current in milliamps
+}

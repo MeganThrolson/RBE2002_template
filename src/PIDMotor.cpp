@@ -64,3 +64,25 @@ void PIDMotor::SetTunings(double Kp, double Ki, double Kd) {
 	this->Kd = Kd;
 	overrideCurrentPosition(getPosition());
 }
+
+// Returns Vel in degress/second
+double PIDMotor::calcVel(){
+  //current positions
+  double curPos=getPosition();
+  //current time
+  curTime=millis();
+  //time change in ms from last call
+  timeInterval=curTime-prevTime;
+  //encoder ticks since last call
+  movement=curPos-prevPos;
+  //encoder ticks to degrees
+  movement= movement *ticksToDeg;
+  //timeInterval in seconds
+  timeInterval=timeInterval/1000;
+  //Velocity in degrees per milliseconds
+  Vel=movement/timeInterval;
+  //sets curent vals to previous
+  prevPos=curPos;
+  prevTime=curTime;
+  return Vel;
+}

@@ -10,12 +10,19 @@
 #include <PID_v1.h>
 #include <stdint.h>
 #define PID_OUTPUT_COMPUTE_RANGE 900
+#define ticksToDeg 0.2206
 class PIDMotor {
 protected:
 
 	float Kp=2, Ki=1.5, Kd=0.1;
 	double Setpoint=0, Input=0, Output=0;
 	bool lastErrPositive=false;
+	double curTime=0;
+	double prevTime=0;
+	double timeInterval=0;
+	double movement=0;
+	double prevPos;
+	double Vel;
 public:
 	PID myPID;
 	PIDMotor();
@@ -26,6 +33,7 @@ public:
 	void SetTunings(double Kp, double Ki, double Kd);
 	void pidinit();
 	float getSetPoint();
+	double calcVel();
 	virtual int64_t getPosition()=0;
 	virtual int64_t getOutputMin()=0;
 	virtual int64_t getOutputMax()=0;
