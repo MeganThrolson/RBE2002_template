@@ -8,33 +8,33 @@
 #include "RBEPID.h"
 
 //Class constructor
-PID::PID(){
-  
+RBEPID::RBEPID() {
+	kp = 0;
+	ki = 0;
+	kd = 0;
 }
 
 //Function to set PID gain values
-void PID::setpid(float P, float I, float D){
-  kp=P;
-  ki=I;
-  kd=D;
+void RBEPID::setpid(float P, float I, float D) {
+	kp = P;
+	ki = I;
+	kd = D;
 }
 
 //Write this function to calculate a control signal from the set velocity 
 //and the current velocity 
-float PID::calc(double setVel, double curVel){
+float RBEPID::calc(double setVel, double curVel) {
 
-    // calculate error
+	// calculate error
 
-    // calculate derivative of error
+	// calculate derivative of error
 
-    // calculate integral error. Running average is best but hard to implement
+	// calculate integral error. Running average is best but hard to implement
 
+	// sum up the error value to send to the motor based off gain values.
 
-    // sum up the error value to send to the motor based off gain values. 
+	// limit control value to 0-254
 
- 
-    // limit control value to 0-254
- 
-    //return the control signal
-
+	//return the control signal
+	return 0;
 }
