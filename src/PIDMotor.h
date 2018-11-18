@@ -39,6 +39,7 @@ public:
 	virtual int64_t getOutputMax()=0;
 	virtual void setOutput(int64_t out)=0;
 	virtual void overrideCurrentPositionHardware(int64_t val)=0;
+	virtual double calcCur(void)=0;
 
 };
 
