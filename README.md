@@ -144,6 +144,7 @@ Flash Frequency 80mhz
 Flash Mode: QIO
 Flash Size: 4mb
 Partition Scheme: Default
+PSRAM: Disabled
 Upload Speed: 921600
 ```
 ![alt text](/doc/ESP32-setup.png)
