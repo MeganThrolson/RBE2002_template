@@ -56,4 +56,5 @@ double HBridgeEncoderPIDMotor::calcCur(void)
   //read analog value
   //convert to volts
   //converts to current in milliamps
+	return 0;
 }

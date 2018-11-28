@@ -36,5 +36,5 @@ float PID::calc(double setVel, double curVel){
     // limit control value to 0-254
  
     //return the control signal
-
+	return 0;
 }
