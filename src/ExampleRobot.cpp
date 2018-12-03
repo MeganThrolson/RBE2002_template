@@ -75,9 +75,11 @@ ExampleRobot::~ExampleRobot() {
 	// TODO Auto-generated destructor stub
 }
 void ExampleRobot::setupPIDServers(){
+#if defined(	USE_WIFI)
 	coms.attach(new PIDConfigureSimplePacketComsServer(numberOfPID,pidList));
 	coms.attach(new GetPIDData(numberOfPID,pidList));
 	coms.attach(new GetPIDConfigureSimplePacketComsServer(numberOfPID,pidList));
+#endif
 
 }
 void ExampleRobot::setup() {
