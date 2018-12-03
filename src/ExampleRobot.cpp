@@ -69,6 +69,8 @@ ExampleRobot::ExampleRobot(String * mn) {
 #endif
 #endif
 	name = mn;
+	serverIR=NULL;
+	sensor= NULL;
 }
 
 ExampleRobot::~ExampleRobot() {
