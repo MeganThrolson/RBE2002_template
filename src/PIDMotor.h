@@ -14,7 +14,7 @@
 class PIDMotor {
 protected:
 
-	float Kp=2, Ki=1.5, Kd=0.1;
+	float Kp=5, Ki=1.5, Kd=0.1;
 	double Setpoint=0, Input=0, Output=0;
 	bool lastErrPositive=false;
 	double curTime=0;
